@@ -1,11 +1,10 @@
-import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Box, Stack, Typography, Avatar } from '@mui/material'
 import { CheckCircle } from '@mui/icons-material'
-import ReactPlayer from 'react-player'
 import { fetchFromAPI } from '../utils/fetchFromAPI'
 import VideoCard from '../components/VideoCard'
+import VideoPlayer from '../components/VideoPlayer'
 import Loader from '../components/Loader'
 
 const VideoDetail = () => {
@@ -34,31 +33,19 @@ const VideoDetail = () => {
 
         {/* Left — Video Player + Details */}
         <Box flex={1}>
-          {/* Player */}
-          <Box
-            sx={{
-              width: '100%',
-              position: 'relative',
-              paddingTop: '56.25%', // 16:9 ratio
-              borderRadius: '12px',
-              overflow: 'hidden',
-              backgroundColor: '#000',
-            }}
-          >
-            <ReactPlayer
-              url={`https://www.youtube.com/watch?v=${id}`}
-              controls
-              playing
-              style={{ position: 'absolute', top: 0, left: 0 }}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+
+          {/* Video Player Component */}
+          <VideoPlayer videoId={id} />
 
           {/* Title */}
           <Typography
             variant="h6"
-            sx={{ color: 'white', fontWeight: 700, mt: 2, fontSize: { xs: '16px', md: '20px' } }}
+            sx={{
+              color: 'white',
+              fontWeight: 700,
+              mt: 2,
+              fontSize: { xs: '16px', md: '20px' },
+            }}
           >
             {snippet?.title}
           </Typography>
@@ -73,19 +60,15 @@ const VideoDetail = () => {
           >
             <Link to={`/channel/${snippet?.channelId}`} style={{ textDecoration: 'none' }}>
               <Stack direction="row" alignItems="center" gap={1}>
-                <Avatar
-                  sx={{ width: 36, height: 36, backgroundColor: '#ff0000', fontSize: '14px' }}
-                >
+                <Avatar sx={{ width: 36, height: 36, backgroundColor: '#ff0000', fontSize: '14px' }}>
                   {snippet?.channelTitle?.[0]}
                 </Avatar>
-                <Box>
-                  <Stack direction="row" alignItems="center" gap={0.5}>
-                    <Typography sx={{ color: 'white', fontWeight: 600, fontSize: '14px' }}>
-                      {snippet?.channelTitle}
-                    </Typography>
-                    <CheckCircle sx={{ fontSize: 14, color: '#aaaaaa' }} />
-                  </Stack>
-                </Box>
+                <Stack direction="row" alignItems="center" gap={0.5}>
+                  <Typography sx={{ color: 'white', fontWeight: 600, fontSize: '14px' }}>
+                    {snippet?.channelTitle}
+                  </Typography>
+                  <CheckCircle sx={{ fontSize: 14, color: '#aaaaaa' }} />
+                </Stack>
               </Stack>
             </Link>
 
@@ -162,6 +145,7 @@ const VideoDetail = () => {
             </Stack>
           )}
         </Box>
+
       </Stack>
     </Box>
   )
